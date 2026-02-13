@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: countriesdb
+      POSTGRES_USER: countriesuser
+      POSTGRES_PASSWORD: countriespass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U countriesuser -d countriesdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_ENGINE=django.db.backends.postgresql
+      - DATABASE_NAME=countriesdb
+      - DATABASE_USER=countriesuser
+      - DATABASE_PASSWORD=countriespass
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 0.0.0.0
+      - DEBUG=1
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+
+volumes:
+  postgres_data:

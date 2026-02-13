@@ -75,10 +75,20 @@ WSGI_APPLICATION = 'countriesapp.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+  'default': {
+        'ENGINE': os.environ.get('DATABASE_ENGINE', 'django.db.backends.postgresql'),
+        'NAME': os.environ.get('DATABASE_NAME', 'countriesdb'),
+        'USER': os.environ.get('DATABASE_USER', 'countriesuser'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'countriespass'),
+        'HOST': os.environ.get('DATABASE_HOST', 'db'),
+        'PORT': os.environ.get('DATABASE_PORT', '5432'),
+        'OPTIONS': {
+            'connect_timeout': 10,
+        },
+        'ATOMIC_REQUESTS': True,
+        'CONN_MAX_AGE': 60,
     }
+   
 }
 
 
