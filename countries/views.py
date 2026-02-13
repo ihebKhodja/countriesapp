@@ -5,7 +5,6 @@ from .models import Country
 
 
 def country_list(request):
-    """List all countries with pagination, region filter, and name search."""
     queryset = Country.objects.all().order_by('common_name')
 
     # Region filter
@@ -37,13 +36,11 @@ def country_list(request):
 
 
 def country_detail(request, cca3):
-    """Detail view for a single country."""
     country = get_object_or_404(Country, cca3=cca3.upper())
     return render(request, 'country_detail.html', {'country': country})
 
 
 def stats(request):
-    """Statistics page."""
     total_countries = Country.objects.count()
     total_population = Country.objects.aggregate(total=Sum('population'))['total'] or 0
     total_area = Country.objects.aggregate(total=Sum('area'))['total'] or 0

@@ -1,4 +1,8 @@
+psycopg2-binary
+pytest
+pytest-django
 python-dotenv
+pytest-cov
 Django>=6.0,<6.1
 psycopg2-binary>=2.9
 requests>=2.31
